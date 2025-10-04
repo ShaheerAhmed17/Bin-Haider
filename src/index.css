@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Rich warm palette - dark with gold/amber accents */
+    --background: 0 0% 7%;
+    --foreground: 38 15% 92%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 38 15% 92%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 38 15% 92%;
+
+    /* Warm gold - primary brand color */
+    --primary: 38 92% 58%;
+    --primary-foreground: 0 0% 7%;
+
+    --secondary: 25 15% 20%;
+    --secondary-foreground: 38 15% 92%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 38 8% 65%;
+
+    --accent: 38 92% 58%;
+    --accent-foreground: 0 0% 7%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 38 15% 92%;
+
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 38 92% 58%;
+
+    --radius: 0rem;
+
+    /* Luxury gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(38, 92%, 58%), hsl(32, 85%, 50%));
+    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 7%), hsl(0, 0%, 12%));
+    --gradient-overlay: linear-gradient(90deg, hsl(0 0% 7% / 0.95) 0%, hsl(0 0% 7% / 0.7) 50%, hsl(0 0% 7% / 0.95) 100%);
+    
+    /* Rich shadows */
+    --shadow-luxury: 0 25px 50px -12px hsl(38 92% 58% / 0.25);
+    --shadow-soft: 0 10px 40px hsl(0 0% 0% / 0.5);
+    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.1);
+    
+    /* Smooth animations */
+    --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/30;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/50;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-slide-right {
+    animation: slideRight 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideRight {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Premium hover effects */
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-luxury);
+  }
+
+  .hover-zoom img {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-zoom:hover img {
+    transform: scale(1.1);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Overlay effects */
+  .overlay-dark {
+    position: relative;
+  }
+
+  .overlay-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, hsl(0 0% 7% / 0.6) 100%);
+    pointer-events: none;
+  }
+}
