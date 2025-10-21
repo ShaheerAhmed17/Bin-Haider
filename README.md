@@ -1,73 +1,77 @@
-# Welcome to your Lovable project
+🏡 Bin-Haider — Modern Interior Design Website
 
-## Project info
+A sleek, responsive, and interactive website built for Bin Haider Interiors, showcasing premium kitchen and interior design solutions.
+This project demonstrates modern front-end design using React, Vite, Tailwind CSS, and ShadCN UI, with smooth animations powered by Framer Motion.
 
-**URL**: https://lovable.dev/projects/2a80e64a-98de-4b67-9c3c-2d1107a62135
+🚀 Live Demo
 
-## How can I edit this code?
+👉 View Website
+ (Add your Netlify/Vercel/GitHub Pages link here after deployment)
 
-There are several ways of editing your application.
+🛠️ Tech Stack
+Technology	Purpose
+React (Vite)	Fast frontend framework for UI development
+TypeScript	Type-safe development and scalability
+Tailwind CSS	Utility-first styling for responsive layouts
+ShadCN UI	Prebuilt, accessible UI components
+Framer Motion / 3D	Interactive animations and motion effects
+Lucide Icons	Clean and modern icons
+⚙️ Installation & Setup
 
-**Use Lovable**
+To run this project locally:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2a80e64a-98de-4b67-9c3c-2d1107a62135) and start prompting.
+# 1️⃣ Clone the repository
+git clone https://github.com/ShaheerAhmed17/Bin-Haider.git
 
-Changes made via Lovable will be committed automatically to this repo.
+# 2️⃣ Go into the project directory
+cd Bin-Haider
 
-**Use your preferred IDE**
+# 3️⃣ Install dependencies
+npm install
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4️⃣ Start the development server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Then open http://localhost:5173
+ in your browser.
 
-**Use GitHub Codespaces**
+📁 Folder Structure
+Bin-Haider/
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── assets/          # Images and static files
+│   ├── pages/           # Page-level components
+│   ├── routes/          # React Router configuration
+│   └── App.tsx          # Main app entry point
+├── public/
+├── package.json
+└── vite.config.ts
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+🧠 Features
 
-## What technologies are used for this project?
+⚡ Lightning-fast Vite bundling
 
-This project is built with:
+🎨 Responsive design with Tailwind CSS
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+🪄 Smooth Framer Motion animations
 
-## How can I deploy this project?
+🧱 Modular and scalable folder structure
 
-Simply open [Lovable](https://lovable.dev/projects/2a80e64a-98de-4b67-9c3c-2d1107a62135) and click on Share -> Publish.
+🌙 Modern UI with ShadCN components
 
-## Can I connect a custom domain to my Lovable project?
+🧭 Client-side routing using React Router
 
-Yes, you can!
+👨‍💻 Author
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Shaheer Ahmed
+📧 gettoknowshaheer798@gmail.com
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+🔗 LinkedIn
+
+💼 GitHub
+
+📄 License
+
+This project is open source and available under the MIT License
+.
