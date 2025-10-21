@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  framework = "vite"
 
-[build.environment]
-  NODE_VERSION = "18"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+  enabled = false
