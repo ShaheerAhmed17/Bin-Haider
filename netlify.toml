@@ -4,7 +4,3 @@
 
 [build.environment]
   NODE_VERSION = "18"
-
-# Disable any framework auto-detection (like Next.js)
-[[plugins]]
-  package = "netlify-plugin-noop"
