@@ -1,19 +1,19 @@
 "use client";
-
 import { useRef, useState, useEffect, useMemo } from "react";
-import { motion, useScroll, useTransform, AnimatePresence, Variants } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+  Variants,
+  useSpring,
+} from "framer-motion";
 import heroImage from "@/assets/spacejoy-9M66C_w_ToM-unsplash.jpg";
 import heroImage2 from "@/assets/texture for cinematic sand background.jpg";
 import logo from "@/assets/BinHaiderLogo.jpg";
 
-const LOADER_DURATION = 2000;
+const LOADER_DURATION = 1800;
 const HEADLINE_WORDS = ["Crafting", "Timeless", "Elegance."];
-
-const SCROLL_RANGES = {
-  text: { start: 0, end: 0.45 },
-  philosophy: { start: 0.45, end: 0.85 },
-  logo: { start: 0, end: 1 },
-} as const;
 
 export default function HeroLuxuryReveal() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,45 +29,36 @@ export default function HeroLuxuryReveal() {
     offset: ["start start", "end end"],
   });
 
-  // Background animations
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.2]);
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
-  const bgBrightness = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.1, 1.25]);
+  // Use spring for smoother, GPU-accelerated interpolation
+  const smoothScroll = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
 
-  // Text animations
-  const textOpacity = useTransform(
-    scrollYProgress,
-    [SCROLL_RANGES.text.start, SCROLL_RANGES.text.end],
-    [1, 0]
-  );
-  const textY = useTransform(
-    scrollYProgress,
-    [SCROLL_RANGES.text.start, SCROLL_RANGES.text.end],
-    ["0px", "40px"]
-  );
+  // Background transforms
+  const bgScale = useTransform(smoothScroll, [0, 1], [1.05, 1.15]);
+  const bgY = useTransform(smoothScroll, [0, 1], ["0%", "-8%"]);
 
-  // Philosophy box animations
-  const philosophyOpacity = useTransform(scrollYProgress, [0.45, 0.6, 0.7, 0.85], [0, 1, 1, 0]);
-  const philosophyY = useTransform(scrollYProgress, [0.45, 0.6, 0.7, 0.85], ["100px", "0px", "0px", "-100px"]);
-  const philosophyBgY = useTransform(scrollYProgress, [0.45, 1], ["5%", "-5%"]);
-  const philosophyBgScale = useTransform(scrollYProgress, [0.45, 1], [1, 1.08]);
+  // Text transforms
+  const textOpacity = useTransform(smoothScroll, [0, 0.4], [1, 0]);
+  const textY = useTransform(smoothScroll, [0, 0.4], ["0px", "40px"]);
 
-  // Logo animations
-  const logoY = useTransform(scrollYProgress, [0, 0.5, 1], ["0%", "-40%", "-100%"]);
-  const logoOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7], [1, 1, 0]);
-  const logoGlow = useTransform(scrollYProgress, [0, 0.4, 0.6], [0, 10, 0]);
+  // Philosophy transforms — reduced range and smoother
+  const philosophyOpacity = useTransform(smoothScroll, [0.35, 0.55, 0.8], [0, 1, 0]);
+  const philosophyY = useTransform(smoothScroll, [0.35, 0.55, 0.8], ["50px", "0px", "-60px"]);
 
-  // Variants (TypeScript-safe)
+  // Logo transforms
+  const logoY = useTransform(smoothScroll, [0, 0.5, 1], ["0%", "-20%", "-60%"]);
+  const logoOpacity = useTransform(smoothScroll, [0, 0.3, 0.8], [1, 1, 0]);
+
+  // Variants
   const headlineVariants: Variants = useMemo(
     () => ({
       hidden: { opacity: 0, y: 20 },
-      visible: (custom: number) => ({
+      visible: (i: number) => ({
         opacity: 1,
         y: 0,
         transition: {
-          delay: 2.6 + custom * 0.3,
-          duration: 0.8,
-          ease: [0.25, 0.1, 0.25, 1], // TS-safe cubic-bezier
+          delay: 2.4 + i * 0.25,
+          duration: 0.6,
+          ease: "easeOut",
         },
       }),
     }),
@@ -77,12 +68,12 @@ export default function HeroLuxuryReveal() {
   const underlineVariants: Variants = useMemo(
     () => ({
       hidden: { scaleX: 0 },
-      visible: (custom: number) => ({
+      visible: (i: number) => ({
         scaleX: 1,
         transition: {
-          delay: 2.6 + custom * 0.4,
-          duration: 0.8,
-          ease: [0.25, 0.1, 0.25, 1],
+          delay: 2.4 + i * 0.3,
+          duration: 0.7,
+          ease: "easeOut",
         },
       }),
     }),
@@ -92,36 +83,28 @@ export default function HeroLuxuryReveal() {
   const loaderVariants: Variants = useMemo(
     () => ({
       initial: { opacity: 1 },
-      exit: { opacity: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
-    }),
-    []
-  );
-
-  const philosophyVariants: Variants = useMemo(
-    () => ({
-      hidden: { opacity: 0, scale: 0.95 },
-      visible: { opacity: 1, scale: 1, transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] } },
+      exit: { opacity: 0, transition: { duration: 0.8, ease: "easeOut" } },
     }),
     []
   );
 
   return (
     <>
-      {/* Loader */}
+      {/* Loader Curtain */}
       <AnimatePresence>
         {loading && (
           <motion.div
             key="loader"
+            className="fixed inset-0 z-[200] bg-[#4A4033] flex items-center justify-center overflow-hidden"
             variants={loaderVariants}
             initial="initial"
             exit="exit"
-            className="fixed inset-0 z-[200] bg-[#4A4033] flex items-center justify-center overflow-hidden"
           >
             <motion.div
               initial={{ height: "0%" }}
               animate={{ height: "100%" }}
               exit={{ height: "0%" }}
-              transition={{ duration: 1.4, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
               className="absolute left-1/2 top-0 w-[2px] bg-gradient-to-b from-[#D8C7A6] to-transparent"
             />
             <motion.img
@@ -130,7 +113,7 @@ export default function HeroLuxuryReveal() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.1, y: -100 }}
-              transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 1, ease: "easeOut" }}
               className="h-24 w-auto z-20"
             />
           </motion.div>
@@ -138,98 +121,87 @@ export default function HeroLuxuryReveal() {
       </AnimatePresence>
 
       {/* Main Section */}
-      <section ref={containerRef} className="relative h-[500vh] w-full">
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#f8f6f2]">
-          {/* Background */}
-          <motion.div className="absolute inset-0 z-0" style={{ scale: bgScale, y: bgY }}>
-            <img src={heroImage} alt="Luxury interior" className="w-full h-full object-cover" loading="lazy" />
-          </motion.div>
+      <section ref={containerRef} className="relative h-[400vh] w-full">
+        <div className="sticky top-0 h-screen w-full overflow-hidden will-change-transform">
 
-          {/* Texture Overlay */}
-          <motion.div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay" style={{ scale: philosophyBgScale, y: philosophyBgY }}>
-            <img src={heroImage2} alt="Texture" className="w-full h-full object-cover" loading="lazy" />
-          </motion.div>
-
-          {/* Brightness */}
-          <motion.div
-            className="absolute inset-0 z-5"
-            style={{
-              backgroundColor: useTransform(bgBrightness, (v) => `rgba(255, 255, 255, ${(v - 1) * 0.3})`),
-            }}
+          {/* Background Image */}
+          <motion.img
+            src={heroImage}
+            alt="Luxury interior"
+            className="absolute inset-0 w-full h-full object-cover will-change-transform"
+            style={{ scale: bgScale, y: bgY }}
+            loading="lazy"
           />
 
-          {/* Gradient Overlay */}
+          {/* Texture Overlay */}
+          <motion.img
+            src={heroImage2}
+            alt="Texture overlay"
+            className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay will-change-transform"
+            style={{ scale: bgScale, y: bgY }}
+            loading="lazy"
+          />
+
+          {/* Light Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/40 to-transparent z-10" />
 
           {/* Logo */}
-          <motion.div
-            className="absolute left-1/2 top-[12%] -translate-x-1/2 z-30 will-change-transform"
-            style={{
-              y: logoY,
-              opacity: logoOpacity,
-              filter: useTransform(logoGlow, (v) => `drop-shadow(0 0 ${v}px #D8C7A6)`),
-            }}
-          >
-            <img src={logo} alt="Bin Haider Logo" className="h-16 w-auto" loading="lazy" />
-          </motion.div>
+          <motion.img
+            src={logo}
+            alt="Bin Haider Logo"
+            className="absolute left-1/2 top-[12%] -translate-x-1/2 h-16 w-auto z-20 will-change-transform"
+            style={{ y: logoY, opacity: logoOpacity }}
+          />
 
           {/* Hero Headline */}
-          <motion.div className="absolute inset-0 flex flex-col items-center justify-center z-20 px-4 text-center will-change-transform" style={{ opacity: textOpacity, y: textY }}>
-            <div className="space-y-3">
-              {HEADLINE_WORDS.map((word, idx) => (
-                <div key={idx}>
-                  <motion.h1
-                    className="text-[5rem] font-serif font-semibold text-[#2b2b2b] leading-tight tracking-tight"
-                    variants={headlineVariants}
-                    initial="hidden"
-                    animate="visible"
-                    custom={idx}
-                  >
-                    {word}
-                  </motion.h1>
-                  <motion.div
-                    className="mx-auto mt-2 h-[2px] w-24 bg-gradient-to-r from-[#D8C7A6] to-transparent"
-                    variants={underlineVariants}
-                    initial="hidden"
-                    animate="visible"
-                    custom={idx}
-                  />
-                </div>
-              ))}
-            </div>
-
+          <motion.div
+            className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-30"
+            style={{ opacity: textOpacity, y: textY }}
+          >
+            {HEADLINE_WORDS.map((word, idx) => (
+              <div key={idx} className="mb-3">
+                <motion.h1
+                  className="text-[4.5rem] md:text-[5rem] font-serif font-semibold text-[#2b2b2b]"
+                  variants={headlineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={idx}
+                >
+                  {word}
+                </motion.h1>
+                <motion.div
+                  className="mx-auto mt-2 h-[2px] w-24 bg-gradient-to-r from-[#D8C7A6] to-transparent"
+                  variants={underlineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={idx}
+                />
+              </div>
+            ))}
             <motion.p
               className="mt-10 max-w-2xl text-lg text-[#5c5c5c] font-light"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 3.4, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ delay: 3, duration: 0.7 }}
             >
-              Every space we design is a narrative of craftsmanship and emotion —
-              blending warmth, light, and refined form into pure harmony.
+              Every space we design is a narrative of craftsmanship and emotion — blending warmth, light, and refined form.
             </motion.p>
           </motion.div>
 
           {/* Philosophy Box */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none will-change-transform"
             style={{ opacity: philosophyOpacity, y: philosophyY }}
           >
-            <motion.div
-              variants={philosophyVariants}
-              initial="hidden"
-              animate="visible"
-              className="bg-[#E8DCC4]/90 backdrop-blur-sm shadow-2xl rounded-2xl px-10 py-16 max-w-2xl text-center pointer-events-auto"
-            >
-              <h2 className="text-4xl font-serif text-[#1e1e1e] mb-6">Our Philosophy</h2>
+            <div className="bg-[#E8DCC4]/85 shadow-xl rounded-2xl px-8 py-12 max-w-2xl text-center pointer-events-auto">
+              <h2 className="text-4xl font-serif text-[#1e1e1e] mb-4">Our Philosophy</h2>
               <p className="text-[#5a5a5a] text-lg leading-relaxed font-sans">
-                We believe every home tells a story. Our design process is built
-                around your narrative — bringing balance, emotion, and art into
-                every space.
+                We believe every home tells a story. Our design process is built around your narrative — bringing balance, emotion, and art into every space.
               </p>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* Film Grain */}
+          {/* Film grain overlay */}
           <div
             className="absolute inset-0 pointer-events-none z-50 opacity-10 mix-blend-overlay"
             style={{
